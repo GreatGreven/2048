@@ -1,7 +1,6 @@
-package com.company;
+package game;
 
 import java.awt.*;
-import java.sql.SQLClientInfoException;
 import java.util.Random;
 
 //23

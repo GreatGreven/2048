@@ -1,4 +1,6 @@
-package com.company;
+package ui;
+
+import game.Matrix;
 
 import javax.swing.*;
 import java.awt.*;

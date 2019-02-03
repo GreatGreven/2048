@@ -1,4 +1,6 @@
-package com.company;
+package ui;
+
+import game.Controller;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,9 +1,9 @@
-package com.company;
+package ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class WinPanel {
+public class LosePanel {
 
 
     private class ButtonListener implements ActionListener {

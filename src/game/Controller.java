@@ -1,14 +1,13 @@
-package com.company;
+package game;
+
+import ui.BoardPanel;
+import ui.MainPanel;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class Controller {
     private static final String TAG = "Controller";
-    static final String TITLE = "2048";
+    public static final String TITLE = "2048";
     private JFrame frame;
     private Matrix matrix;
     private JPanel mainPanel;

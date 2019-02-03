@@ -1,4 +1,4 @@
-package com.company;
+import game.Controller;
 
 public class Main {
 
