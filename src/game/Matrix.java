@@ -5,20 +5,21 @@ import java.util.Random;
 
 //23
 public class Matrix {
-    public static final int COLOR_2 = new Color(255,255,232).getRGB();
-    public static final int COLOR_4 = new Color(255,209,209).getRGB();
-    public static final int COLOR_8 = new Color(255,186,186).getRGB();
-    public static final int COLOR_16 = new Color(255,163,163).getRGB();
-    public static final int COLOR_32 = new Color(255,140,140).getRGB();
-    public static final int COLOR_64 = new Color(255,177,117).getRGB();
-    public static final int COLOR_128 = new Color(255,153,0).getRGB();
-    public static final int COLOR_256 = new Color(255,71,71).getRGB();
-    public static final int COLOR_512 = new Color(255,25,25).getRGB();
-    public static final int COLOR_1024 = new Color(200,2,200).getRGB();
-    public static final int COLOR_2048 = new Color(100,48,150).getRGB();
+    private static final String TAG = "Matrix: ";
+    public static final int COLOR_2 = new Color(255, 255, 232).getRGB();
+    public static final int COLOR_4 = new Color(255, 209, 209).getRGB();
+    public static final int COLOR_8 = new Color(255, 186, 186).getRGB();
+    public static final int COLOR_16 = new Color(255, 163, 163).getRGB();
+    public static final int COLOR_32 = new Color(255, 140, 140).getRGB();
+    public static final int COLOR_64 = new Color(255, 177, 117).getRGB();
+    public static final int COLOR_128 = new Color(255, 153, 0).getRGB();
+    public static final int COLOR_256 = new Color(255, 71, 71).getRGB();
+    public static final int COLOR_512 = new Color(255, 25, 25).getRGB();
+    public static final int COLOR_1024 = new Color(200, 2, 200).getRGB();
+    public static final int COLOR_2048 = new Color(100, 48, 150).getRGB();
     private int rows;
     private int cols;
-    private Square [][] matrix;
+    private Square[][] matrix;
     private Random rand = new Random();
 
     public Matrix(int rows, int cols) {
@@ -34,22 +35,38 @@ public class Matrix {
         spawnRandom();
     }
 
-    public void moveUp(){
+    public void moveUp() {
         for (int row = 1; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
                 if (matrix[row][col] != null) {
-                    if (matrix[row-1][col] != null && matrix[row][col].number == matrix[row-1][col].number){
-                        //smash together
-                        smashTogether(col,row,col,row-1);
-                    } else if (row >= 2 && matrix[row-2][col] != null && matrix[row][col].number == matrix[row-2][col].number){
-                        //smash together
-                        smashTogether(col,row,col,row-2);
-                    } else if (row >= 3 && matrix[row-3][col] != null && matrix[row][col].number == matrix[row-3][col].number){
-                        //smash together
-                        smashTogether(col,row,col,row-3);
+                    System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                    boolean merged = false;
+                    for (int i = row - 1; i >= 0; i--) {
+                        System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                        if (matrix[i][col] != null) {
+                            System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                            try {
+                                if (matrix[row][col].number == matrix[i][col].number) {
+                                    smashTogether(row, col, i, col);
+                                    merged = true;
+                                    move(i, col, -1, 0);
+                                    break;
+//                                } else {
+//                                    move(i + 1, col, -1, 0);
+                                }
+                            } catch (NullPointerException e) {
+//                                System.out.println("At row: " + row + " and col: " + col + " Checking index: " + i);
+//                                System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at origin is: " + matrix[row][col].number);
+//                                System.out.println("Checking matrix at " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at Checking is: " + matrix[row][col].number);
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    //then move up
-                    move(col,row,col,row -(row-1));
+                    if (!merged){
+                        move(row, col, -1, 0);
+                    }
                 }
             }
         }
@@ -57,22 +74,38 @@ public class Matrix {
         spawnRandom();
     }
 
-    public void moveLeft(){
+    public void moveLeft() {
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 1; col < matrix[row].length; col++) {
                 if (matrix[row][col] != null) {
-                    if (matrix[row][col-1] != null && matrix[row][col].number == matrix[row][col-1].number){
-                        //smash together
-                        smashTogether(col,row,col-1,row);
-                    } else if (col >= 2 && matrix[row][col-2] != null && matrix[row][col].number == matrix[row][col-2].number){
-                        //smash together
-                        smashTogether(col,row,col-2,row);
-                    } else if (col >= 3 && matrix[row][col-3] != null && matrix[row][col].number == matrix[row][col-3].number){
-                        //smash together
-                        smashTogether(col,row,col-3,row);
+                    System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                    boolean merged = false;
+                    for (int i = col - 1; i >= 0; i--) {
+                        System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                        if (matrix[row][i] != null) {
+                            System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                            try {
+                                if (matrix[row][col].number == matrix[row][i].number) {
+                                    smashTogether(row, col, row, i);
+                                    move(row, i, 0, -1);
+                                    merged = true;
+                                    break;
+//                                } else {
+//                                    move(row, i + 1, 0, -1);
+                                }
+                            } catch (NullPointerException e) {
+//                                System.out.println("At row: " + row + " and col: " + col + " Checking index: " + i);
+//                                System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at origin is: " + matrix[row][col].number);
+//                                System.out.println("Checking matrix at " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at Checking is: " + matrix[row][col].number);
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    //then move left
-                    move(col,row,col - (cols - 1),row);
+                    if (!merged){
+                        move(row, col, 0, -1);
+                    }
                 }
             }
         }
@@ -80,22 +113,38 @@ public class Matrix {
         spawnRandom();
     }
 
-    public void moveRight(){
+    public void moveRight() {
         for (int row = 0; row < matrix.length; row++) {
-            for (int col = matrix[row].length-2; col >= 0 ; col--) {
+            for (int col = matrix[row].length - 2; col >= 0; col--) {
                 if (matrix[row][col] != null) {
-                    if (matrix[row][col+1] != null && matrix[row][col].number == matrix[row][col+1].number){
-                        //smash together
-                        smashTogether(col,row,col+1,row);
-                    } else if (row >= 2 && matrix[row][col+2] != null && matrix[row][col].number == matrix[row][col+2].number){
-                        //smash together then move up
-                        smashTogether(col,row,col+2,row);
-                    } else if (row >= 3 && matrix[row][col+3] != null && matrix[row][col].number == matrix[row][col+3].number){
-                        //smash together then move up
-                        smashTogether(col,row,col,row+3);
+                    System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                    boolean merged = false;
+                    for (int i = col + 1; i < cols; i++) {
+                        System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                        if (matrix[row][i] != null) {
+                            System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                            try {
+                                if (matrix[row][col].number == matrix[row][i].number) {
+                                    smashTogether(row, col, row, i);
+                                    move(row, i, 0, +1);
+                                    merged = true;
+                                    break;
+//                                } else {
+//                                    move(row, i - 1, 0, +1);
+                                }
+                            } catch (NullPointerException e) {
+//                                System.out.println("At row: " + row + " and col: " + col + " Checking index: " + i);
+//                                System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at origin is: " + matrix[row][col].number);
+//                                System.out.println("Checking matrix at " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at Checking is: " + matrix[row][col].number);
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    //then move up
-                    move(col,row,col + (cols - 1),row);
+                    if (!merged){
+                        move(row, col, 0, +1);
+                    }
                 }
             }
         }
@@ -103,22 +152,38 @@ public class Matrix {
         spawnRandom();
     }
 
-    public void moveDown(){
-        for (int row = matrix.length-2; row >= 0 ; row--) {
+    public void moveDown() {
+        for (int row = matrix.length - 2; row >= 0; row--) {
             for (int col = 0; col < matrix[row].length; col++) {
                 if (matrix[row][col] != null) {
-                    if (matrix[row+1][col] != null && matrix[row][col].number == matrix[row+1][col].number){
-                        //smash together
-                        smashTogether(col,row,col,row+1);
-                    } else if (row >= 2 && matrix[row+2][col] != null && matrix[row][col].number == matrix[row+2][col].number){
-                        //smash together then move up
-                        smashTogether(col,row,col,row+2);
-                    } else if (row >= 3 && matrix[row+3][col] != null && matrix[row][col].number == matrix[row+3][col].number){
-                        //smash together then move up
-                        smashTogether(col,row,col,row+3);
+                    System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                    boolean merged = false;
+                    for (int i = row + 1; i < rows; i++) {
+                        System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                        if (matrix[i][col] != null) {
+                            System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+                            try {
+                                if (matrix[row][col].number == matrix[i][col].number) {
+                                    smashTogether(row, col, i, col);
+                                    move(i, col, +1, 0);
+                                    merged = true;
+                                    break;
+//                                } else {
+//                                    move(i - 1, col, +1, 0);
+                                }
+                            } catch (NullPointerException e) {
+//                                System.out.println("At row: " + row + " and col: " + col + " Checking index: " + i);
+//                                System.out.println("Origin in matrix at row " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at origin is: " + matrix[row][col].number);
+//                                System.out.println("Checking matrix at " + row + " and col " + col + " is: " + matrix[row][col]);
+//                                System.out.println("Number at Checking is: " + matrix[row][col].number);
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    //then move up
-                    move(col,row,col,row + (rows - 1));
+                    if(!merged){
+                        move(row, col, +1, 0);
+                    }
                 }
             }
         }
@@ -126,22 +191,24 @@ public class Matrix {
         spawnRandom();
     }
 
-    private void spawnRandom(){
-        int randomRow = rand.nextInt(rows);
-        int randomCol = rand.nextInt(cols);
-        while (matrix[randomRow][randomCol] != null){
+    private void spawnRandom() {
+        int randomRow, randomCol;
+        do {
             randomRow = rand.nextInt(rows);
             randomCol = rand.nextInt(cols);
-        }
+        } while (matrix[randomRow][randomCol] != null);
         Square square = new Square();
-        matrix[randomRow][randomCol] = new Square();
+        square.number = 2;
+        square.color = COLOR_2;
+        square.used = false;
+        matrix[randomRow][randomCol] = square;
     }
 
-    private void smashTogether(int col1, int row1, int col2, int row2){
+    private void smashTogether(int fRow, int fCol, int tRow, int tCol) {
         Square square = new Square();
-        square.number = matrix[row1][col1].number + matrix[row2][col2].number;
+        square.number = matrix[fRow][fCol].number + matrix[fRow][fCol].number;
         square.used = true;
-        switch (square.number){
+        switch (square.number) {
             case 2:
                 square.color = COLOR_2;
                 break;
@@ -175,55 +242,86 @@ public class Matrix {
             case 2048:
                 square.color = COLOR_2048;
         }
-        matrix[row1][col1] = square;
-        matrix[row2][col2] = null;
+        matrix[tRow][tCol] = square;
+        matrix[fRow][fCol] = null;
     }
 
-    private void move(int fromCol, int fromRow, int toCol, int toRow){
-        matrix[toRow][toCol] = matrix[fromRow][fromCol];
-        matrix[fromRow][fromCol] = null;
+    private void move(int fromRow, int fromCol, int dRow, int dCol) {
+        int row = fromRow;
+        int col = fromCol;
+        if (dRow < 0) {
+            while (row - 1 >= 0 && matrix[row - 1][fromCol] == null) {
+                row--;
+            }
+        } else if (dRow > 0) {
+            while (row + 1 < rows && matrix[row + 1][fromCol] == null) {
+                row++;
+            }
+        } else if (dCol < 0) {
+            while (col - 1 >= 0 && matrix[fromRow][col - 1] == null) {
+                col--;
+            }
+        } else if (dCol > 0) {
+            while (col + 1 < cols && matrix[fromRow][col + 1] == null) {
+                col++;
+            }
+        } else {
+            System.out.println(TAG + "Move Error");
+            System.out.println(dCol);
+            System.out.println(dRow);
+        }
+        if (row != fromRow || col != fromCol) {
+            try {
+                matrix[row][col] = matrix[fromRow][fromCol];
+                matrix[fromRow][fromCol] = null;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("From row: " + fromRow + " and col: " + fromCol);
+                System.out.println("To row: " + row + " and col: " + col);
+                e.printStackTrace();
+            }
+        }
     }
 
-    private void resetUsed(){
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                if (matrix[i][j] != null){
-                    matrix[i][j].used = false;
+    private void resetUsed() {
+        for (Square[] row : matrix) {
+            for (Square square : row) {
+                if (square != null) {
+                    square.used = false;
                 }
             }
         }
     }
 
-    public int getRows(){
+    public int getRows() {
         return rows;
     }
 
-    public int getColumns(){
+    public int getColumns() {
         return cols;
     }
 
-    public Square getSquare(int row, int col){
-        if (row > this.rows || col > this.cols){
+    public Square getSquare(int row, int col) {
+        if (row > this.rows || col > this.cols) {
             throw new ArrayIndexOutOfBoundsException();
         }
         return matrix[row][col];
     }
 
     public int getNumber(int row, int col) {
-        if (row > this.rows || col > this.cols){
+        if (row > this.rows || col > this.cols) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if (matrix[row][col] != null){
+        if (matrix[row][col] != null) {
             return matrix[row][col].number;
         }
         return 0;
     }
 
     public int getColor(int row, int col) {
-        if (row > this.rows || col > this.cols){
+        if (row > this.rows || col > this.cols) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if (matrix[row][col] != null){
+        if (matrix[row][col] != null) {
             return matrix[row][col].color;
         }
         return 0;
@@ -235,18 +333,12 @@ public class Matrix {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
                 toReturn.append("|");
-                toReturn.append(getNumber(i,j));
+                toReturn.append(getNumber(i, j));
                 toReturn.append("|");
             }
             toReturn.append("\n");
         }
         toReturn.append("-----------------------------------------------");
         return toReturn.toString();
-    }
-
-    private class Square {
-        private int number;
-        private int color;
-        private boolean used;
     }
 }
