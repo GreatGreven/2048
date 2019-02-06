@@ -1,7 +1,9 @@
 package game;
 
+import java.awt.*;
+
 public class Square {
     int number;
-    int color;
+    Color color;
     boolean used;
 }

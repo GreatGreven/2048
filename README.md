@@ -6,6 +6,8 @@ Commits:
 
 #2 Refactored packages and classes to have a proper, object oriented structure.
 
-#3 Fixed broken game logic and two major bugs, i.e. :
+#3 Made the project "more" object-oriented and divided the Square and the Matrix classes and fixed broken game logic and two major bugs, i.e. :
     1. The game had a lot of semantic-errors which caused ArrayIndexOutOfBoundsException. This is because my first attempt to write the different move methods where sloppy and not thought all the way through.
     2. The game also had a tendency to move the square first and then try to merged it but when tried to merge the square couldn't be found (because it was already moved), and it caused a NullPointerException. Again it was because caused of poorly thought semantics.
+
+#4 Added the visual representation of the game and implemented end-game checks in case the game has been won or is over. Need to fix the spawnRandom-method because it spins forever when the board is full of tiles.

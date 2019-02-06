@@ -27,7 +27,7 @@ public class Controller {
     }
 
     private void initializeBoardPanel(int difficulty) {
-        boardPanel = new BoardPanel(difficulty, difficulty);
+        boardPanel = new BoardPanel(this, difficulty, difficulty);
     }
 
     private void initializeWinPanel() {
