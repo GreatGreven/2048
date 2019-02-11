@@ -24,7 +24,6 @@ public class BoardPanel extends JPanel {
     public BoardPanel(Controller controller, int row, int col) {
         this.controller = controller;
         this.matrix = new Matrix(row, col);
-        System.out.println(matrix.toString());
         this.row = row;
         this.col = col;
 

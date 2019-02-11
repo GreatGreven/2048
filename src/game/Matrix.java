@@ -19,13 +19,15 @@ public class Matrix {
     public static final Color COLOR_2048 = new Color(100, 48, 150);
     private int rows;
     private int cols;
-    private Square[][] matrix;
+    private Tile[][] matrix;
     private Random rand = new Random();
+    private boolean isOver;
+    private boolean hasFreeSpace;
 
     public Matrix(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.matrix = new Square[rows][cols];
+        this.matrix = new Tile[rows][cols];
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
                 matrix[row][col] = null;
@@ -56,8 +58,11 @@ public class Matrix {
                 }
             }
         }
+        checkGameOver();
+        if (hasFreeSpace){
+            spawnRandom();
+        }
         resetUsed();
-        spawnRandom();
     }
 
     public void moveLeft() {
@@ -81,8 +86,11 @@ public class Matrix {
                 }
             }
         }
+        checkGameOver();
+        if (hasFreeSpace){
+            spawnRandom();
+        }
         resetUsed();
-        spawnRandom();
     }
 
     public void moveRight() {
@@ -106,8 +114,11 @@ public class Matrix {
                 }
             }
         }
+        checkGameOver();
+        if (hasFreeSpace){
+            spawnRandom();
+        }
         resetUsed();
-        spawnRandom();
     }
 
     public void moveDown() {
@@ -131,8 +142,11 @@ public class Matrix {
                 }
             }
         }
+        checkGameOver();
+        if (hasFreeSpace){
+            spawnRandom();
+        }
         resetUsed();
-        spawnRandom();
     }
 
     private void spawnRandom() {
@@ -141,52 +155,57 @@ public class Matrix {
             randomRow = rand.nextInt(rows);
             randomCol = rand.nextInt(cols);
         } while (matrix[randomRow][randomCol] != null);
-        Square square = new Square();
-        square.number = 2;
-        square.color = COLOR_2;
-        square.used = false;
-        matrix[randomRow][randomCol] = square;
+        Tile tile = new Tile();
+        if (rand.nextBoolean()){
+            tile.number = 2;
+            tile.color = COLOR_2;
+        } else {
+            tile.number = 4;
+            tile.color = COLOR_4;
+        }
+//        tile.used = false;
+        matrix[randomRow][randomCol] = tile;
     }
 
     private void smashTogether(int fRow, int fCol, int tRow, int tCol) {
-        Square square = new Square();
-        square.number = matrix[fRow][fCol].number + matrix[fRow][fCol].number;
-        square.used = true;
-        switch (square.number) {
+        Tile tile = new Tile();
+        tile.number = matrix[fRow][fCol].number + matrix[fRow][fCol].number;
+        tile.used = true;
+        switch (tile.number) {
             case 2:
-                square.color = COLOR_2;
+                tile.color = COLOR_2;
                 break;
             case 4:
-                square.color = COLOR_4;
+                tile.color = COLOR_4;
                 break;
             case 8:
-                square.color = COLOR_8;
+                tile.color = COLOR_8;
                 break;
             case 16:
-                square.color = COLOR_16;
+                tile.color = COLOR_16;
                 break;
             case 32:
-                square.color = COLOR_32;
+                tile.color = COLOR_32;
                 break;
             case 64:
-                square.color = COLOR_64;
+                tile.color = COLOR_64;
                 break;
             case 128:
-                square.color = COLOR_128;
+                tile.color = COLOR_128;
                 break;
             case 256:
-                square.color = COLOR_256;
+                tile.color = COLOR_256;
                 break;
             case 512:
-                square.color = COLOR_512;
+                tile.color = COLOR_512;
                 break;
             case 1024:
-                square.color = COLOR_1024;
+                tile.color = COLOR_1024;
                 break;
             case 2048:
-                square.color = COLOR_2048;
+                tile.color = COLOR_2048;
         }
-        matrix[tRow][tCol] = square;
+        matrix[tRow][tCol] = tile;
         matrix[fRow][fCol] = null;
     }
 
@@ -227,24 +246,24 @@ public class Matrix {
     }
 
     private void resetUsed() {
-        for (Square[] row : matrix) {
-            for (Square square : row) {
-                if (square != null) {
-                    square.used = false;
+        for (Tile[] row : matrix) {
+            for (Tile tile : row) {
+                if (tile != null) {
+                    tile.used = false;
                 }
             }
         }
     }
 
-    public int getRows() {
+    public int getRowSize() {
         return rows;
     }
 
-    public int getColumns() {
+    public int getColumnSize() {
         return cols;
     }
 
-    public Square getSquare(int row, int col) {
+    public Tile getTile(int row, int col) {
         if (row > this.rows || col > this.cols) {
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -275,7 +294,7 @@ public class Matrix {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null){
-                    if (matrix[row][col].number == 2048){
+                    if (matrix[row][col].number >= 2048){
                         return true;
                     }
                 }
@@ -284,7 +303,7 @@ public class Matrix {
         return false;
     }
 
-    public boolean isOver() {
+    private void checkGameOver(){
         int pairs = 0;
         int freeSpace = 0;
         for (int row = 0; row < rows; row++) {
@@ -335,9 +354,12 @@ public class Matrix {
                 }
             }
         }
-        System.out.println("isOver pairs: " + pairs);
-        System.out.println("isOver free space: " + freeSpace);
-        return pairs == 0 && freeSpace == 0;
+        hasFreeSpace = freeSpace > 0;
+        isOver = !(pairs > 0) && !hasFreeSpace;
+    }
+
+    public boolean isOver() {
+        return isOver;
     }
 
     @Override

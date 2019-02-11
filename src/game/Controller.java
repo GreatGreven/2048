@@ -1,15 +1,18 @@
 package game;
 
 import ui.BoardPanel;
+import ui.LosePanel;
 import ui.MainPanel;
+import ui.WinPanel;
 
 import javax.swing.*;
 
 public class Controller {
     private static final String TAG = "Controller";
     public static final String TITLE = "2048";
-    private JFrame frame;
+    private int difficulty;
     private Matrix matrix;
+    private JFrame frame;
     private JPanel mainPanel;
     private JPanel boardPanel;
     private JPanel winPanel;
@@ -27,15 +30,16 @@ public class Controller {
     }
 
     private void initializeBoardPanel(int difficulty) {
+        this.difficulty = difficulty;
         boardPanel = new BoardPanel(this, difficulty, difficulty);
     }
 
     private void initializeWinPanel() {
-
+        winPanel = new WinPanel(this);
     }
 
     private void initializeLosePanel() {
-
+        losePanel = new LosePanel(this);
     }
 
     public void displayMainPanel(){
@@ -89,5 +93,9 @@ public class Controller {
             frame.add(losePanel);
             frame.pack();
         });
+    }
+
+    public int getDifficulty() {
+        return difficulty;
     }
 }
