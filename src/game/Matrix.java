@@ -38,8 +38,8 @@ public class Matrix {
     }
 
     public void moveUp() {
-        for (int row = 1; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
+        for (int row = 1; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = row - 1; i >= 0; i--) {
@@ -48,8 +48,8 @@ public class Matrix {
                                 smashTogether(row, col, i, col);
                                 merged = true;
                                 move(i, col, -1, 0);
-                                break;
                             }
+                            break;
                         }
                     }
                     if (!merged) {
@@ -66,8 +66,8 @@ public class Matrix {
     }
 
     public void moveLeft() {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 1; col < matrix[row].length; col++) {
+        for (int row = 0; row < rows; row++) {
+            for (int col = 1; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = col - 1; i >= 0; i--) {
@@ -76,8 +76,8 @@ public class Matrix {
                                 smashTogether(row, col, row, i);
                                 move(row, i, 0, -1);
                                 merged = true;
-                                break;
                             }
+                            break;
                         }
                     }
                     if (!merged) {
@@ -94,8 +94,8 @@ public class Matrix {
     }
 
     public void moveRight() {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = matrix[row].length - 2; col >= 0; col--) {
+        for (int row = 0; row < rows; row++) {
+            for (int col = cols - 2; col >= 0; col--) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = col + 1; i < cols; i++) {
@@ -104,8 +104,8 @@ public class Matrix {
                                 smashTogether(row, col, row, i);
                                 move(row, i, 0, +1);
                                 merged = true;
-                                break;
                             }
+                            break;
                         }
                     }
                     if (!merged) {
@@ -122,8 +122,8 @@ public class Matrix {
     }
 
     public void moveDown() {
-        for (int row = matrix.length - 2; row >= 0; row--) {
-            for (int col = 0; col < matrix[row].length; col++) {
+        for (int row = rows - 2; row >= 0; row--) {
+            for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = row + 1; i < rows; i++) {
@@ -132,8 +132,8 @@ public class Matrix {
                                 smashTogether(row, col, i, col);
                                 move(i, col, +1, 0);
                                 merged = true;
-                                break;
                             }
+                            break;
                         }
                     }
                     if (!merged) {

@@ -15,13 +15,15 @@ Commits:
 #5 Refactored name of class Square to Tile.
 
 #6 Added the graphic and functionality in the windows when the game is either won or is lost.
-       Also fixed the never-ending spawning loop where if there where no tiles free then it could not randomly generate the a new tile.
-        And Also refactored the class name of the previous Square-class to Tile, where it's a more accurate description of what it represents.
+   Also fixed the never-ending spawning loop where if there where no tiles free then it could not randomly generate the a new tile.
+   And Also refactored the class name of the previous Square-class to Tile, where it's a more accurate description of what it represents.
+
+#7 Fixed the jump-merge bug, it was a simple semantics error.
 
 Features left to implement:
     - A score/move counter that represents the score/moves of the game.
     - Invent a score-system for the game.
+    - Add animations so its easier to track the movement of the tiles.
 
-Bugs left to fix:
-    - A tile sometimes jumps over another tile to merge a third tile.
+
 
