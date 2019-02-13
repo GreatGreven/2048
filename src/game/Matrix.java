@@ -23,10 +23,15 @@ public class Matrix {
     private Random rand = new Random();
     private boolean isOver;
     private boolean hasFreeSpace;
+    private boolean hasMoved;
+    private int moves;
+    private int score;
 
     public Matrix(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
+        this.moves = 0;
+        this.score = 0;
         this.matrix = new Tile[rows][cols];
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
@@ -38,113 +43,124 @@ public class Matrix {
     }
 
     public void moveUp() {
+        int merges = 0;
         for (int row = 1; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null) {
-                    boolean merged = false;
                     for (int i = row - 1; i >= 0; i--) {
-                        if (matrix[i][col] != null) {
+                        if (matrix[i][col] != null && !matrix[i][col].used) {
                             if (matrix[row][col].number == matrix[i][col].number) {
                                 smashTogether(row, col, i, col);
-                                merged = true;
                                 move(i, col, -1, 0);
+                                merges++;
                             }
                             break;
                         }
                     }
-                    if (!merged) {
+                    if (matrix[row][col] != null && !matrix[row][col].used) {
                         move(row, col, -1, 0);
                     }
                 }
             }
         }
         checkGameOver();
-        if (hasFreeSpace){
+        if (hasFreeSpace && (hasMoved || merges > 0)){
             spawnRandom();
+            moves++;
+            hasMoved = false;
         }
         resetUsed();
     }
 
     public void moveLeft() {
+        int merges = 0;
         for (int row = 0; row < rows; row++) {
             for (int col = 1; col < cols; col++) {
                 if (matrix[row][col] != null) {
-                    boolean merged = false;
                     for (int i = col - 1; i >= 0; i--) {
-                        if (matrix[row][i] != null) {
+                        if (matrix[row][i] != null && !matrix[row][i].used) {
                             if (matrix[row][col].number == matrix[row][i].number) {
                                 smashTogether(row, col, row, i);
                                 move(row, i, 0, -1);
-                                merged = true;
+                                merges++;
                             }
                             break;
                         }
                     }
-                    if (!merged) {
+                    if (matrix[row][col] != null && !matrix[row][col].used) {
                         move(row, col, 0, -1);
                     }
                 }
             }
         }
         checkGameOver();
-        if (hasFreeSpace){
+        if (hasFreeSpace && (hasMoved || merges > 0)){
             spawnRandom();
+            moves++;
+            hasMoved = false;
         }
         resetUsed();
     }
 
     public void moveRight() {
+        int merges = 0;
         for (int row = 0; row < rows; row++) {
             for (int col = cols - 2; col >= 0; col--) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = col + 1; i < cols; i++) {
-                        if (matrix[row][i] != null) {
+                        if (matrix[row][i] != null && !matrix[row][i].used) {
                             if (matrix[row][col].number == matrix[row][i].number) {
                                 smashTogether(row, col, row, i);
                                 move(row, i, 0, +1);
-                                merged = true;
+                                merges++;
                             }
                             break;
                         }
                     }
-                    if (!merged) {
+                    if (matrix[row][col] != null && !matrix[row][col].used) {
                         move(row, col, 0, +1);
                     }
                 }
             }
         }
         checkGameOver();
-        if (hasFreeSpace){
+        if (hasFreeSpace && (hasMoved || merges > 0)){
             spawnRandom();
+            moves++;
+            hasMoved = false;
         }
         resetUsed();
     }
 
     public void moveDown() {
+        int merges = 0;
         for (int row = rows - 2; row >= 0; row--) {
             for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = row + 1; i < rows; i++) {
-                        if (matrix[i][col] != null) {
+                        if (matrix[i][col] != null && !matrix[i][col].used) {
                             if (matrix[row][col].number == matrix[i][col].number) {
                                 smashTogether(row, col, i, col);
                                 move(i, col, +1, 0);
+                                merges++;
                                 merged = true;
                             }
                             break;
                         }
                     }
-                    if (!merged) {
+                    if (matrix[row][col] != null && !matrix[row][col].used) {
                         move(row, col, +1, 0);
                     }
                 }
             }
         }
         checkGameOver();
-        if (hasFreeSpace){
+        if (hasFreeSpace && (hasMoved || merges > 0)){
             spawnRandom();
+            moves++;
+            hasMoved = false;
         }
         resetUsed();
     }
@@ -163,14 +179,81 @@ public class Matrix {
             tile.number = 4;
             tile.color = COLOR_4;
         }
-//        tile.used = false;
         matrix[randomRow][randomCol] = tile;
     }
 
     private void smashTogether(int fRow, int fCol, int tRow, int tCol) {
+        int value = matrix[fRow][fCol].number + matrix[tRow][tCol].number;
+        setTile(value, true, tRow, tCol);
+        matrix[fRow][fCol] = null;
+    }
+
+    private void move(int fromRow, int fromCol, int dRow, int dCol) {
+        int row = fromRow;
+        int col = fromCol;
+        if (dRow < 0) { //check upwards
+            while (row - 1 >= 0 && matrix[row - 1][fromCol] == null) {
+                row--;
+            }
+        } else if (dRow > 0) { //check downwards
+            while (row + 1 < rows && matrix[row + 1][fromCol] == null) {
+                row++;
+            }
+        } else if (dCol < 0) { //check leftwards
+            while (col - 1 >= 0 && matrix[fromRow][col - 1] == null) {
+                col--;
+            }
+        } else if (dCol > 0) { //check rightwards
+            while (col + 1 < cols && matrix[fromRow][col + 1] == null) {
+                col++;
+            }
+        } else { //safety check
+            System.out.println(TAG + "Move Error");
+            System.out.println(dCol);
+            System.out.println(dRow);
+        }
+        if (row != fromRow || col != fromCol) {
+            try {
+                matrix[row][col] = matrix[fromRow][fromCol];
+                matrix[fromRow][fromCol] = null;
+                hasMoved = true;
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("From row: " + fromRow + " and col: " + fromCol);
+                System.out.println("To row: " + row + " and col: " + col);
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void resetUsed() {
+        for (Tile[] row : matrix) {
+            for (Tile tile : row) {
+                if (tile != null) {
+                    tile.used = false;
+                }
+            }
+        }
+    }
+
+    public int getRowSize() {
+        return rows;
+    }
+
+    public int getColumnSize() {
+        return cols;
+    }
+
+    public Tile getTile(int row, int col) {
+        if (row > this.rows || col > this.cols) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        return matrix[row][col];
+    }
+
+    public void setTile(int value, boolean setUsed, int row, int col) {
         Tile tile = new Tile();
-        tile.number = matrix[fRow][fCol].number + matrix[fRow][fCol].number;
-        tile.used = true;
+        tile.number = value;
+        tile.used = setUsed;
         switch (tile.number) {
             case 2:
                 tile.color = COLOR_2;
@@ -205,69 +288,7 @@ public class Matrix {
             case 2048:
                 tile.color = COLOR_2048;
         }
-        matrix[tRow][tCol] = tile;
-        matrix[fRow][fCol] = null;
-    }
-
-    private void move(int fromRow, int fromCol, int dRow, int dCol) {
-        int row = fromRow;
-        int col = fromCol;
-        if (dRow < 0) {
-            while (row - 1 >= 0 && matrix[row - 1][fromCol] == null) {
-                row--;
-            }
-        } else if (dRow > 0) {
-            while (row + 1 < rows && matrix[row + 1][fromCol] == null) {
-                row++;
-            }
-        } else if (dCol < 0) {
-            while (col - 1 >= 0 && matrix[fromRow][col - 1] == null) {
-                col--;
-            }
-        } else if (dCol > 0) {
-            while (col + 1 < cols && matrix[fromRow][col + 1] == null) {
-                col++;
-            }
-        } else {
-            System.out.println(TAG + "Move Error");
-            System.out.println(dCol);
-            System.out.println(dRow);
-        }
-        if (row != fromRow || col != fromCol) {
-            try {
-                matrix[row][col] = matrix[fromRow][fromCol];
-                matrix[fromRow][fromCol] = null;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("From row: " + fromRow + " and col: " + fromCol);
-                System.out.println("To row: " + row + " and col: " + col);
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void resetUsed() {
-        for (Tile[] row : matrix) {
-            for (Tile tile : row) {
-                if (tile != null) {
-                    tile.used = false;
-                }
-            }
-        }
-    }
-
-    public int getRowSize() {
-        return rows;
-    }
-
-    public int getColumnSize() {
-        return cols;
-    }
-
-    public Tile getTile(int row, int col) {
-        if (row > this.rows || col > this.cols) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        return matrix[row][col];
+        matrix[row][col] = tile;
     }
 
     public int getNumber(int row, int col) {
@@ -288,6 +309,14 @@ public class Matrix {
             return matrix[row][col].color;
         }
         return null;
+    }
+
+    public int getMoves() {
+        return moves;
+    }
+
+    public int getScore() {
+        return score;
     }
 
     public boolean hasWon() {
