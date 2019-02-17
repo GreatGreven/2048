@@ -48,11 +48,13 @@ public class Matrix {
             for (int col = 0; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     for (int i = row - 1; i >= 0; i--) {
-                        if (matrix[i][col] != null && !matrix[i][col].used) {
-                            if (matrix[row][col].number == matrix[i][col].number) {
-                                smashTogether(row, col, i, col);
-                                move(i, col, -1, 0);
-                                merges++;
+                        if (matrix[i][col] != null) {
+                            if (!matrix[i][col].used){
+                                if (matrix[row][col].number == matrix[i][col].number) {
+                                    smashTogether(row, col, i, col);
+                                    move(i, col, -1, 0);
+                                    merges++;
+                                }
                             }
                             break;
                         }
@@ -78,11 +80,13 @@ public class Matrix {
             for (int col = 1; col < cols; col++) {
                 if (matrix[row][col] != null) {
                     for (int i = col - 1; i >= 0; i--) {
-                        if (matrix[row][i] != null && !matrix[row][i].used) {
-                            if (matrix[row][col].number == matrix[row][i].number) {
-                                smashTogether(row, col, row, i);
-                                move(row, i, 0, -1);
-                                merges++;
+                        if (matrix[row][i] != null) {
+                            if (!matrix[row][i].used){
+                                if (matrix[row][col].number == matrix[row][i].number) {
+                                    smashTogether(row, col, row, i);
+                                    move(row, i, 0, -1);
+                                    merges++;
+                                }
                             }
                             break;
                         }
@@ -109,11 +113,13 @@ public class Matrix {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = col + 1; i < cols; i++) {
-                        if (matrix[row][i] != null && !matrix[row][i].used) {
-                            if (matrix[row][col].number == matrix[row][i].number) {
-                                smashTogether(row, col, row, i);
-                                move(row, i, 0, +1);
-                                merges++;
+                        if (matrix[row][i] != null) {
+                            if (!matrix[row][i].used){
+                                if (matrix[row][col].number == matrix[row][i].number) {
+                                    smashTogether(row, col, row, i);
+                                    move(row, i, 0, +1);
+                                    merges++;
+                                }
                             }
                             break;
                         }
@@ -140,12 +146,14 @@ public class Matrix {
                 if (matrix[row][col] != null) {
                     boolean merged = false;
                     for (int i = row + 1; i < rows; i++) {
-                        if (matrix[i][col] != null && !matrix[i][col].used) {
-                            if (matrix[row][col].number == matrix[i][col].number) {
-                                smashTogether(row, col, i, col);
-                                move(i, col, +1, 0);
-                                merges++;
-                                merged = true;
+                        if (matrix[i][col] != null) {
+                            if (!matrix[i][col].used){
+                                if (matrix[row][col].number == matrix[i][col].number) {
+                                    smashTogether(row, col, i, col);
+                                    move(i, col, +1, 0);
+                                    merges++;
+                                    merged = true;
+                                }
                             }
                             break;
                         }
@@ -184,6 +192,7 @@ public class Matrix {
 
     private void smashTogether(int fRow, int fCol, int tRow, int tCol) {
         int value = matrix[fRow][fCol].number + matrix[tRow][tCol].number;
+        score += value;
         setTile(value, true, tRow, tCol);
         matrix[fRow][fCol] = null;
     }

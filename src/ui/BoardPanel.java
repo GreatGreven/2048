@@ -60,8 +60,8 @@ public class BoardPanel extends JPanel {
         JPanel panel = new JPanel(new GridLayout(2, 1, 5, 5));
         panel.setOpaque(true);
         panel.setBackground(Color.WHITE);
-        moveLabel = new JLabel("Score: " + matrix.getScore(), SwingConstants.CENTER);
-        scoreLabel = new JLabel("Moves: " + matrix.getMoves(), SwingConstants.CENTER);
+        scoreLabel  = new JLabel("Score: " + matrix.getScore(), SwingConstants.CENTER);
+        moveLabel= new JLabel("Moves: " + matrix.getMoves(), SwingConstants.CENTER);
         panel.add(scoreLabel);
         panel.add(moveLabel);
         add(panel, BorderLayout.NORTH);
@@ -136,10 +136,13 @@ public class BoardPanel extends JPanel {
                     if (e.getSource() == displayLabels[i][j]) {
                         String[] options = {"0", "2", "4", "8", "16", "32", "64", "128", "256", "512", "1024", "2048"};
                         int inputIndex = Integer.MAX_VALUE;
-                        while (inputIndex != JOptionPane.CLOSED_OPTION)
+//                        while (inputIndex != JOptionPane.CLOSED_OPTION)
                             inputIndex = JOptionPane.showOptionDialog(null, "Change value of tile at position [" + j + ":" + i + "]", "GODMODE", JOptionPane.OK_CANCEL_OPTION,
                                     JOptionPane.INFORMATION_MESSAGE, null, options , JOptionPane.DEFAULT_OPTION);
                         matrix.setTile(Integer.parseInt(options[inputIndex]), false, i, j);
+//                        if (inputIndex >= 0 || inputIndex < options.length){
+//                            break;
+//                        }
                     }
                 }
             }

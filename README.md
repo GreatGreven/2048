@@ -23,13 +23,15 @@ Commits:
 #8 Fixed the multi-merge bug. Implemented a move counter for each game and the game is ready to display the score but a "score-system" needs to be implemented.
    Added a godmode for debugging purposes by pressing a secret key while in game.
 
+#9 Fixed the part of the multi-merge bug that only by a pattern of two types of tiles, i.e. 8, 4, 4, 8 as either row or col.
+   This was actually a jump-merge bug that only appears when the same tiles of three are next to each other, and only the middle tile is already used.
+   Implemented a score-system for the game where you gain the amount of points of the new tile you've merged forth,
+   i.e. merge 2 and 2 then you get a tile with the value of 4 and that's the points you get.
+
 Features left to implement:
-    - Invent a score-system for the game.
     - Add animations so its easier to track the movement of the tiles.
-    - Implement a debugging "god"-mode
 
 Bugs left to fix:
-    - a part of the multi-merge bug that only can be reproduce by a specific pattern, i.e. 8, 4, 4, 8 as either a row or a column.
 
 
 
