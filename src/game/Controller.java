@@ -52,6 +52,7 @@ public class Controller {
             frame.setVisible(true);
             frame.add(mainPanel);
             frame.pack();
+            frame.setLocationRelativeTo(null);
         });
     }
 
@@ -66,6 +67,7 @@ public class Controller {
             frame.setVisible(true);
             frame.add(boardPanel);
             frame.pack();
+            frame.setLocationRelativeTo(null);
         });
     }
 
@@ -79,6 +81,7 @@ public class Controller {
             frame.setVisible(true);
             frame.add(winPanel);
             frame.pack();
+            frame.setLocationRelativeTo(null);
         });
     }
 
@@ -92,6 +95,7 @@ public class Controller {
             frame.setVisible(true);
             frame.add(losePanel);
             frame.pack();
+            frame.setLocationRelativeTo(null);
         });
     }
 

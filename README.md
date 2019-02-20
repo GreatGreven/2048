@@ -28,10 +28,12 @@ Commits:
    Implemented a score-system for the game where you gain the amount of points of the new tile you've merged forth,
    i.e. merge 2 and 2 then you get a tile with the value of 4 and that's the points you get.
 
+#10 Fixed that the frame always is displayed at the center of the screen.
+    Added the META-INF folder to the .gitignore.
+
 Features left to implement:
     - Add animations so its easier to track the movement of the tiles.
 
-Bugs left to fix:
 
 
 
