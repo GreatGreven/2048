@@ -1,6 +1,6 @@
-package ui;
+package v2.ui;
 
-import game.Controller;
+import v2.game.Controller;
 
 import javax.swing.*;
 import java.awt.*;

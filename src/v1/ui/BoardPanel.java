@@ -1,7 +1,7 @@
-package ui;
+package v1.ui;
 
-import game.Controller;
-import game.Matrix;
+import v1.game.Controller;
+import v1.game.Matrix;
 
 import javax.swing.*;
 import javax.swing.border.Border;

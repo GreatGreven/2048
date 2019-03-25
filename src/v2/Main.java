@@ -1,4 +1,6 @@
-import game.Controller;
+package v2;
+
+import v2.game.Controller;
 
 public class Main {
 

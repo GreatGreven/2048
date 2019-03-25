@@ -1,9 +1,9 @@
-package game;
+package v2.game;
 
-import ui.BoardPanel;
-import ui.LosePanel;
-import ui.MainPanel;
-import ui.WinPanel;
+import v2.ui.BoardPanel;
+import v2.ui.LosePanel;
+import v2.ui.MainPanel;
+import v2.ui.WinPanel;
 
 import javax.swing.*;
 
